@@ -49,6 +49,13 @@ const osThreadAttr_t defaultTask_attributes = {
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityNormal,
 };
+/* Definitions for CLI_Task */
+osThreadId_t CLI_TaskHandle;
+const osThreadAttr_t CLI_Task_attributes = {
+  .name = "CLI_Task",
+  .stack_size = 512 * 4,
+  .priority = (osPriority_t) osPriorityNormal,
+};
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
@@ -58,6 +65,7 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART1_UART_Init(void);
 void StartDefaultTask(void *argument);
+void StartCLI_Task(void *argument);
 
 /* USER CODE BEGIN PFP */
 
@@ -123,6 +131,9 @@ int main(void)
   /* Create the thread(s) */
   /* creation of defaultTask */
   defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
+
+  /* creation of CLI_Task */
+  CLI_TaskHandle = osThreadNew(StartCLI_Task, NULL, &CLI_Task_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -279,9 +290,27 @@ void StartDefaultTask(void *argument)
 	  HAL_UART_Transmit(&huart1, test_str, sizeof(test_str), 100);
 
 	 // HAL_UART_Transmit_IT(UART_HandleTypeDef *huart, const uint8_t *pData, uint16_t Size);
-	  osDelay(1000);
+	  osDelay(500);
   }
   /* USER CODE END 5 */
+}
+
+/* USER CODE BEGIN Header_StartCLI_Task */
+/**
+* @brief Function implementing the CLI_Task thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartCLI_Task */
+void StartCLI_Task(void *argument)
+{
+  /* USER CODE BEGIN StartCLI_Task */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END StartCLI_Task */
 }
 
 /**
